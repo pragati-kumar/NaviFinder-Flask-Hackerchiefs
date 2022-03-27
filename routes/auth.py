@@ -30,6 +30,7 @@ def register():
 
     user = newUser.save()
 
-    # jwtKey = jwt.encode({"_id": user._id, "phone": user.phone}, os.getenv("JWT_SECRET"))
+    jwtKey = jwt.encode(
+        {"_id": str(user._id), "phone": user.phone}, os.getenv("JWT_SECRET"))
 
-    return jsonify(body), 201
+    return jsonify({**(user.toDict()), "jwtKey": jwtKey}), 201

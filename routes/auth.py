@@ -1,4 +1,10 @@
-from flask import Blueprint, flash
+import os
+from flask import Blueprint, flash, jsonify, request
+import jwt
+import bcrypt
+
+from models.user_model import User
+from utils.appLogger import log
 
 authBlueprint = Blueprint('auth', __name__, url_prefix="/auth")
 
@@ -10,4 +16,20 @@ def authIndex():
 
 @authBlueprint.route("/register", methods=["POST"])
 def register():
-    pass
+
+    body = request.json
+
+    if body["confirmPassword"] != body["password"]:
+        return jsonify({"message": "Passwords dont match"}), 400
+
+    hashed = bcrypt.hashpw(
+        body["password"].encode("utf-8"), bcrypt.gensalt(10))
+
+    newUser = User(phone=body["phone"], password=hashed)
+    log(newUser)
+
+    user = newUser.save()
+
+    # jwtKey = jwt.encode({"_id": user._id, "phone": user.phone}, os.getenv("JWT_SECRET"))
+
+    return jsonify(body), 201

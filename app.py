@@ -1,9 +1,4 @@
-from dotenv import load_dotenv
 from __init__ import create_app
-load_dotenv()
-
-import config.database
-from utils import appLogger
 
 app = create_app(__name__)
 

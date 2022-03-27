@@ -19,9 +19,11 @@ def register():
 
     body = request.json
 
-    user = User.objects.values().get({'phone': body["phone"]})
+    user = User.objects.raw({'phone': body["phone"]})
 
-    if user:
+    # log(user.count())
+
+    if user.count():
         return jsonify({"message": "User already exists"}), 403
 
     if body["confirmPassword"] != body["password"]:
@@ -30,7 +32,7 @@ def register():
     hashed = bcrypt.hashpw(
         body["password"].encode("utf-8"), bcrypt.gensalt(10))
 
-    newUser = User(phone=body["phone"], password=hashed)
+    newUser = User(phone=body["phone"], password=str(hashed)[2:-1])
     log(newUser)
 
     user = newUser.save()
@@ -39,3 +41,30 @@ def register():
         {"_id": str(user._id), "phone": user.phone}, os.getenv("JWT_SECRET"))
 
     return jsonify({**(user.toDict()), "jwtKey": jwtKey}), 201
+
+
+@authBlueprint.route("/login", methods=["POST"])
+def login():
+
+    body = request.json
+
+    # log(body)
+
+    try:
+        user = User.objects.raw({'phone': body["phone"]}).first()
+
+    except User.DoesNotExist:
+        return jsonify({"message": "User does not exist"}), 404
+
+    # log(type(user.password))
+
+    isMatch = bcrypt.checkpw(
+        body["password"].encode("utf-8"), user.password.encode("utf-8"))
+
+    if not isMatch:
+        return jsonify({"message": "Password does not match"}), 401
+
+    jwtKey = jwt.encode(
+        {"_id": str(user._id), "phone": user.phone}, os.getenv("JWT_SECRET"))
+
+    return jsonify({**(user.toDict()), "jwtKey": jwtKey}), 200

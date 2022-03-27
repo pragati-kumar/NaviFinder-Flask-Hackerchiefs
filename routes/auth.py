@@ -19,6 +19,11 @@ def register():
 
     body = request.json
 
+    user = User.objects.values().get({'phone': body["phone"]})
+
+    if user:
+        return jsonify({"message": "User already exists"}), 403
+
     if body["confirmPassword"] != body["password"]:
         return jsonify({"message": "Passwords dont match"}), 400
 

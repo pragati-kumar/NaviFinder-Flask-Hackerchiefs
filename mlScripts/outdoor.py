@@ -10,6 +10,8 @@ import plotly
 import plotly.express as px
 import simdkalman
 
+from utils.appLogger import log
+
 
 def calc_haversine(lat1, lon1, lat2, lon2):
     """Calculates the great circle distance between two points
@@ -241,6 +243,8 @@ def processCoordinates(collectionName, phoneName, msSinceEpoch, latitude, longit
         base_test.loc[0, :] = bt
         base_test.to_csv(f'{collectionName}_df.csv', index=False)
 
+        return latitude, longitude
+
     else:
         base_test = pd.read_csv(f'{collectionName}_df.csv')
         print(base_test.shape)
@@ -268,7 +272,9 @@ def processCoordinates(collectionName, phoneName, msSinceEpoch, latitude, longit
 
         test_remove.to_csv(f'{collectionName}_df.csv', index=False)
 
-        return test_remove['latDeg'][-1], test_remove['lngdeg'][-1]
+        log(len(test_remove))
+
+        return test_remove.loc[-1, 'latDeg'], test_remove.loc[-1, 'lngdeg']
 
 
 # for i in range(0,15):

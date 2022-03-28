@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify
 
 from middlewares.auth_middleware import token_required
 from mlScripts.outdoor import processCoordinates
+from utils.appLogger import log
 
 locationBlueprint = Blueprint("location", __name__, url_prefix="/location")
 
@@ -18,7 +19,11 @@ def getOutdoorLocation(user):
 
     body = request.json
 
-    latitude, longitude = processCoordinates(
+    res = processCoordinates(
         user["_id"], "phone", time() * 1000, body["latitude"], body["longitude"], "phone", body["trial"])
+
+    log(res)
+
+    latitude, longitude = res
 
     return jsonify({"latitude": latitude, "longitude": longitude}), 200

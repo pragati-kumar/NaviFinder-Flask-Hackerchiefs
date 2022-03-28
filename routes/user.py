@@ -26,3 +26,10 @@ def updateUser(user):
 
     if(request.method == "PUT"):
         pass
+
+
+@userBlueprint.route("/fcm", methods=["POST"])
+@token_required
+def addFCMToken(user):
+
+    return user_controller.addFCMToken(user, request.json)

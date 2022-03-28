@@ -3,6 +3,8 @@ import os
 from flask import jsonify, request
 import jwt
 
+from utils.appLogger import log
+
 
 def token_required(f):
     @wraps(f)
@@ -17,9 +19,12 @@ def token_required(f):
 
         try:
             # decoding the payload to fetch the stored details
-            data = jwt.decode(token, os.getenv('JWT_SECRET'))
+            log(token)
+            data = jwt.decode(token, os.getenv(
+                'JWT_SECRET'), algorithms=["HS256"])
 
-        except:
+        except Exception as e:
+            log(e)
             return jsonify({
                 'message': 'Invalid Token!'
             }), 401

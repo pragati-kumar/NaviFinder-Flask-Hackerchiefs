@@ -26,6 +26,7 @@ class Model2(nn.Module):
 
 def getCoordinates(user_id,rssi,model_path,scaler_path,trial=True):
     print(rssi)
+    rssi = abs(rssi)
     if trial==True:
         rssi_list = []
         joblib.dump(rssi_list,f'{user_id}.pkl')
@@ -55,12 +56,13 @@ def getCoordinates(user_id,rssi,model_path,scaler_path,trial=True):
                 for j in range(0,29):
                     inp1.append(i)
                     inp2.append(-100)
-            inp1 = list(scalerr.transform(np.array(inp2).reshape(-1,1)).flatten())
+            # inp1 = list(scalerr.transform(np.array(inp1).reshape(-1,1)).flatten())
             fin = torch.zeros(1,174,2)
             fin[:,:,0] = torch.Tensor(inp1)
             fin[:,:,1] = torch.Tensor(inp2)
             model.eval()
-            preds = model(fin)[-1].detach().cpu().numpy()
+            with torch.no_grad():
+                preds = model(fin)[-1].detach().cpu().numpy()
             x_cords = preds[:,1].mean()
             y_cords = preds[:,2].mean()
             floor = round(preds[:,0].mean())

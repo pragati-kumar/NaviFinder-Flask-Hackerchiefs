@@ -241,6 +241,9 @@ def processCoordinates(collectionName, phoneName, msSinceEpoch, latitude, longit
         base_test = pd.DataFrame(columns=[
                                  'collectionName', 'phoneName', 'millisSinceGpsEpoch', 'latDeg', 'lngDeg', 'phone'])
         base_test.loc[0, :] = bt
+
+        base_test = base_test.reset_index()
+
         base_test.to_csv(f'{collectionName}_df.csv', index=False)
 
         return latitude, longitude
@@ -270,11 +273,13 @@ def processCoordinates(collectionName, phoneName, msSinceEpoch, latitude, longit
         test_remove['NewlatDeg'] = test_remove['latDeg']
         test_remove['NewlngDeg'] = test_remove['lngDeg']
 
+        test_remove = test_remove.reset_index()
+
         test_remove.to_csv(f'{collectionName}_df.csv', index=False)
 
         log(len(test_remove))
 
-        return test_remove.loc[-1, 'latDeg'], test_remove.loc[-1, 'lngdeg']
+        return test_remove.loc[len(test_remove) - 1, 'NewlatDeg'], test_remove.loc[len(test_remove) - 1, 'NewlngDeg']
 
 
 # for i in range(0,15):

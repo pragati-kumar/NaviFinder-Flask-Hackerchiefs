@@ -9,5 +9,5 @@ def log(o):
         calframe = inspect.getouterframes(curframe, 2)
 
         print("-------------------------------")
-        print("🐛", f"[{calframe[1][1].split('SIH-2022-Flask/')[1]}]", o)
+        print("🐛", f"[{calframe[1][1].split('SIH-2022-Flask')[1][1:]}]", o)
         print("-------------------------------")

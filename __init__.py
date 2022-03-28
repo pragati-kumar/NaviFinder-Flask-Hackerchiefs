@@ -11,8 +11,10 @@ def create_app(name):
 
     from routes.auth import authBlueprint
     from routes.user import userBlueprint
+    from routes.location import locationBlueprint
 
     app.register_blueprint(authBlueprint)
     app.register_blueprint(userBlueprint)
+    app.register_blueprint(locationBlueprint)
 
     return app

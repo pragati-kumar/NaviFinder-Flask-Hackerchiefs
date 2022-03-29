@@ -11,6 +11,15 @@ This guide assumes Python 3.6+ and pip is installed on the system
 - Clone the repository
 - In a terminal, at the root folder run `pip install -r requirements.txt`
 
+#### Environment Setup
+
+Environment variables have been hidden for security purposes
+
+- This app requires 2 env variables
+- Create a `.env` file in the root directory, and add the following:
+  - MONGO_URL=<Your Mongo +srv url>
+  - JWT_SECRET=<The JWT key for signing tokens>
+
 #### Running the application
 
 - For Windows:

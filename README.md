@@ -17,8 +17,8 @@ Environment variables have been hidden for security purposes
 
 - This app requires 2 env variables
 - Create a `.env` file in the root directory, and add the following:
-  - MONGO_URL=<Your Mongo +srv url>
-  - JWT_SECRET=<The JWT key for signing tokens>
+  - MONGO_URL=&lt;Your Mongo +srv url&gt;
+  - JWT_SECRET=&lt;The JWT key for signing tokens&gt;
 
 #### Running the application
 

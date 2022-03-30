@@ -42,4 +42,4 @@ def getIndoorLocation(user):
 
     x, y, floor = res
 
-    return jsonify({"x": None if x is None else float(x), "y": None if y is None else float(y), "floor": None if floor is None else  floor}), 200
+    return jsonify({"x": None if x is None else float(x), "y": None if y is None else float(y), "floor": None if floor is None else floor}), 200

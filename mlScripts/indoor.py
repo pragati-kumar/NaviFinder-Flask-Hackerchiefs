@@ -33,14 +33,14 @@ def getCoordinates(user_id, rssi, model_path, scaler_path, trial=True):
     if trial == True:
         rssi_list = []
         joblib.dump(rssi_list, f'{user_id}.pkl')
-        return None, None, None
+        return [None, None, None]
     else:
         rssi_list = joblib.load(f'{user_id}.pkl')
         rssi_list.append(rssi)
         print(rssi_list)
         if len(rssi_list) < 6:
             joblib.dump(rssi_list, f'{user_id}.pkl')
-            return None, None, None
+            return [None, None, None]
 
         elif len(rssi_list) >= 6:
             rssi_list = rssi_list[len(rssi_list) - 6:]
@@ -71,4 +71,4 @@ def getCoordinates(user_id, rssi, model_path, scaler_path, trial=True):
             y_cords = preds[:, 2].mean()
             floor = round(preds[:, 0].mean())
 
-            return x_cords, y_cords, floor
+            return [x_cords, y_cords, floor]
